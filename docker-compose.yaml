@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  miservicio_mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ~/docker/mysql-data:/var/lib/mysql
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    deploy:
+      restart_policy:
+        condition: on-failure
+   
+  miservicio_php:
+    image: php:8-apache
+    volumes:    
+      - ./html/:/var/www/html
+    expose:
+      - 80
+    ports:
+      - 80:80
+    links: 
+      - miservicio_mysql
